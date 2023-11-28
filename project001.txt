@@ -1,0 +1,86 @@
+<html>
+<head>
+    <script src="node_modules/web3.js-browser/build/web3.js"></script>
+    <script src="node_modules/web3/dist/web3.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script>
+
+    web3 = new Web3 ( new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
+    //web3.eth.getBalance("0x3DaA90098798193a000DE8C9A462f9Bf6271baDd").then(console.log);
+    
+    web3.eth.defaultAccount=web3.eth.accounts[0];
+    var mycontact = new web3.eth.Contract([
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "setValue",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [],
+		"name": "getValue",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "value",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+],"0xfaCa4e0f9780b483D99376c94503DF712A3613d8");
+
+
+    </script>
+</head>
+<body>
+<input type="text" id="newvalue" />
+<input type="button" id="setvalue" value="Set New..." /><hr />
+
+<input type="button" id="getvalue" value="Get New..." /> New Value : <span id="show"></span>
+
+<script>
+$("#getvalue").click(function(){
+
+mycontact.methods.getValue().call().then(function(data){
+    $("#show").html(data);
+});
+});
+
+
+$("#setvalue").click(function(){
+
+var newval = $("#newvalue").val();
+//alert(newval);
+mycontact.methods.setValue(newval).send({from : "0x1f025b8f5c4D268CB7818A4e08064eDab2d632Ce", gas : '3000000' });
+});
+
+</script>
+</body>
+</html>
